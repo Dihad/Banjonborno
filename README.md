@@ -35,6 +35,7 @@ Soft ambient glows, glass panels, and a dark background create an engaging, dist
 ## 🎓 Use Case
 
 Ideal for **students**, **teachers**, or **anyone learning Bengali phonetics**. The quiz's dynamic nature makes it perfect for self‑assessment and repeated practice.
+Link: https://dihad.github.io/Banjonborno/
 
 ---
 
@@ -53,6 +54,6 @@ The app is lightweight, fast, and easy to deploy on any static host (GitHub Page
 Simply open the `index.html` file in any modern browser—no build step required.
 
 ```bash
-git clone https://github.com/yourusername/banjonborno.git
+git clone https://github.com/Dihad/Banjonborno.git
 cd banjonborno
 open index.html
