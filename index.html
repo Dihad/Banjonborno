@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Banjonborno (ব্যঞ্জনবর্ণ) — Interactive Test</title>
+    <link rel="icon" type="image/png" href="https://dihad.github.io/Repeating-Decimal-Operations/web%20icon.jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0b0e;
+            --bg-2: #101318;
+            --surface: rgba(255, 255, 255, 0.045);
+            --surface-strong: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.09);
+            --border-hi: rgba(255, 255, 255, 0.2);
+            --orange: #ff7a29;
+            --orange-soft: #ffb066;
+            --purple: #9a5bff;
+            --purple-soft: #c3a4ff;
+            --green: #34e6a6;
+            --green-soft: #8ff5cf;
+            --gray: #8b93a3;
+            --gray-dim: #565d6b;
+            --red: #ff5a5a;
+            --red-soft: #ff9a9a;
+            --blue: #5b9fff;
+            --blue-soft: #a8c8ff;
+            --text: #eef0f3;
+            --text-dim: #9aa1ad;
+            --radius-lg: 20px;
+            --radius: 14px;
+            --radius-sm: 10px;
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --space-7: 48px;
+            --space-8: 64px;
+            --font-bengali: 'Noto Sans Bengali', 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        .bg-fixed {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(ellipse 900px 600px at 10% -5%, rgba(255, 122, 41, 0.14), transparent 60%),
+                radial-gradient(ellipse 700px 700px at 100% 10%, rgba(154, 91, 255, 0.12), transparent 60%),
+                radial-gradient(ellipse 800px 600px at 30% 100%, rgba(52, 230, 166, 0.08), transparent 60%),
+                linear-gradient(180deg, #08090b 0%, #0a0b0e 40%, #0c0e12 100%);
+            background-attachment: fixed;
+        }
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.01em;
+            margin: 0;
+        }
+        .bengali {
+            font-family: var(--font-bengali);
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            flex: 1;
+        }
+
+        .sidebar {
+            background: rgba(10, 11, 14, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            z-index: 50;
+            position: sticky;
+            top: 0;
+            width: 100%;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: 8px;
+        }
+        .brand .swatch {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            background: linear-gradient(135deg, var(--orange), var(--purple));
+        }
+        .brand span {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .lang-toggle-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+        }
+        .lang-toggle {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 3px;
+            cursor: pointer;
+            position: relative;
+            width: 64px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+        .lang-toggle .toggle-knob {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--orange), var(--orange-soft));
+            transition: transform .3s ease;
+            box-shadow: 0 2px 8px rgba(255, 122, 41, 0.4);
+            position: absolute;
+            left: 3px;
+            top: 2px;
+        }
+        .lang-toggle.bn .toggle-knob {
+            transform: translateX(33px);
+            background: linear-gradient(135deg, var(--green), var(--green-soft));
+            box-shadow: 0 2px 8px rgba(52, 230, 166, 0.4);
+        }
+        .lang-toggle .lang-label {
+            font-size: 10px;
+            font-weight: 600;
+            z-index: 1;
+            width: 50%;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: .05em;
+            color: var(--gray);
+            transition: color .3s ease;
+            pointer-events: none;
+        }
+        .lang-toggle .lang-label.active {
+            color: var(--text);
+        }
+        .nav-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-left: 8px;
+        }
+        .nav-group h4 {
+            display: none;
+        }
+        .nav-group a {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 13px;
+            transition: all .2s ease;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1px solid transparent;
+        }
+        .nav-group a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--border);
+        }
+
+        .content {
+            flex: 1;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px 16px 80px;
+        }
+
+        .page-head {
+            margin-bottom: 32px;
+        }
+        .page-head h1 {
+            font-size: 30px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        .page-head h1 .bengali-accent {
+            color: var(--orange-soft);
+        }
+        .page-head p {
+            color: var(--text-dim);
+            font-size: 15px;
+            max-width: 620px;
+            line-height: 1.65;
+        }
+
+        section.block {
+            margin-bottom: 40px;
+            scroll-margin-top: 80px;
+        }
+        .block-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .block-head h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .block-head span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--gray-dim);
+        }
+        .block-desc {
+            color: var(--text-dim);
+            font-size: 14px;
+            margin: -4px 0 14px;
+            max-width: 620px;
+            line-height: 1.6;
+        }
+
+        .glass {
+            background: linear-gradient(155deg, var(--surface), rgba(255, 255, 255, 0.015));
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(22px) saturate(140%);
+            -webkit-backdrop-filter: blur(22px) saturate(140%);
+            box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.06) inset, 0 20px 50px -20px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            -webkit-overflow-scrolling: touch;
+            max-width: 100%;
+        }
+        .consonant-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 650px;
+        }
+        .consonant-table th,
+        .consonant-table td {
+            padding: 10px 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .consonant-table thead th {
+            background: rgba(255, 255, 255, 0.03);
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text);
+            letter-spacing: 0.02em;
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1.4;
+        }
+        .consonant-table thead th .header-line1,
+        .consonant-table thead th .header-line2 {
+            display: block;
+        }
+        .consonant-table tbody td {
+            font-size: 18px;
+            font-weight: 600;
+            font-family: var(--font-bengali);
+            transition: background .2s ease;
+            cursor: default;
+        }
+        .consonant-table tbody td:hover {
+            background: rgba(255, 122, 41, 0.08);
+        }
+        .consonant-table tbody td.row-label {
+            font-weight: 600;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dim);
+            text-align: left;
+            min-width: 80px;
+        }
+        .consonant-table .row-label .en {
+            display: block;
+            font-size: 10px;
+            color: var(--gray-dim);
+            font-weight: 400;
+        }
+
+        /* Buttons */
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--orange), #ff9a4d);
+            color: #1a0d02;
+            box-shadow: 0 8px 30px -8px rgba(255, 122, 41, 0.55);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+        .btn-ghost {
+            color: var(--text);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .btn-ghost:active {
+            transform: scale(0.97);
+        }
+        .btn-outline-red {
+            color: var(--red-soft);
+            border: 1px solid rgba(255, 90, 90, 0.4);
+            background: rgba(255, 90, 90, 0.06);
+        }
+        .btn-outline-red:active {
+            transform: scale(0.97);
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 12px;
+            border-radius: 8px;
+        }
+
+        /* Tag pills */
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-bengali);
+            font-size: 13px;
+            padding: 7px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .tag-pill .en-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: var(--gray);
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+        .tag-pill.place {
+            border-color: rgba(255, 122, 41, 0.35);
+            background: rgba(255, 122, 41, 0.07);
+        }
+        .tag-pill.place .en-label {
+            color: var(--orange-soft);
+        }
+        .tag-pill.voicing-aghosh {
+            border-color: rgba(154, 91, 255, 0.35);
+            background: rgba(154, 91, 255, 0.07);
+        }
+        .tag-pill.voicing-aghosh .en-label {
+            color: var(--purple-soft);
+        }
+        .tag-pill.voicing-ghosh {
+            border-color: rgba(52, 230, 166, 0.35);
+            background: rgba(52, 230, 166, 0.07);
+        }
+        .tag-pill.voicing-ghosh .en-label {
+            color: var(--green);
+        }
+        .tag-pill.aspiration-alpaprana {
+            border-color: rgba(255, 122, 41, 0.3);
+            background: rgba(255, 122, 41, 0.05);
+        }
+        .tag-pill.aspiration-mahaprana {
+            border-color: rgba(154, 91, 255, 0.3);
+            background: rgba(154, 91, 255, 0.05);
+        }
+        .tag-pill.aspiration-nasikya {
+            border-color: rgba(52, 230, 166, 0.3);
+            background: rgba(52, 230, 166, 0.05);
+        }
+
+        /* Quiz */
+        .quiz-section {
+            display: none;
+        }
+        .quiz-section.active {
+            display: block;
+        }
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+            font-size: 12px;
+        }
+        .quiz-progress, .quiz-score, .quiz-timer {
+            font-family: 'JetBrains Mono', monospace;
+            padding: 5px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .quiz-score {
+            color: var(--green);
+            background: rgba(52, 230, 166, 0.08);
+            border-color: rgba(52, 230, 166, 0.25);
+        }
+        .quiz-timer {
+            color: var(--blue-soft);
+            background: rgba(91, 159, 255, 0.08);
+            border-color: rgba(91, 159, 255, 0.25);
+        }
+        .question-card {
+            padding: 20px;
+            margin-bottom: 14px;
+        }
+        .question-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--gray);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+        .question-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .question-prompt {
+            font-size: 15px;
+            color: var(--text-dim);
+            margin-bottom: 14px;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .option-btn {
+            font-family: var(--font-bengali);
+            font-size: 24px;
+            font-weight: 600;
+            padding: 16px 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text);
+            cursor: pointer;
+            transition: all .2s ease;
+            position: relative;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .option-btn:active {
+            transform: scale(0.96);
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .option-btn.correct {
+            border-color: var(--green) !important;
+            background: rgba(52, 230, 166, 0.15) !important;
+            color: var(--green) !important;
+            box-shadow: 0 0 20px rgba(52, 230, 166, 0.2);
+        }
+        .option-btn.incorrect {
+            border-color: var(--red) !important;
+            background: rgba(255, 90, 90, 0.12) !important;
+            color: var(--red) !important;
+        }
+        .option-btn .option-label {
+            position: absolute;
+            top: 4px;
+            left: 8px;
+            font-size: 9px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--gray-dim);
+            text-transform: uppercase;
+        }
+        .quiz-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .feedback-msg {
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .feedback-msg.correct-fb {
+            color: var(--green);
+        }
+        .feedback-msg.incorrect-fb {
+            color: var(--red);
+        }
+
+        /* Results */
+        .results-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .results-section.active {
+            display: block;
+        }
+        .results-summary {
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .results-summary .big-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--orange-soft);
+            line-height: 1.1;
+        }
+        .results-summary .big-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-top: 4px;
+        }
+        .results-summary .sub-stats {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .results-summary .sub-stat {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+        .results-summary .sub-stat span {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .results-detail {
+            padding: 16px;
+        }
+        .result-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            font-size: 13px;
+            border: 1px solid transparent;
+            flex-wrap: wrap;
+        }
+        .result-row.correct-row {
+            background: rgba(52, 230, 166, 0.06);
+            border-color: rgba(52, 230, 166, 0.2);
+        }
+        .result-row.incorrect-row {
+            background: rgba(255, 90, 90, 0.06);
+            border-color: rgba(255, 90, 90, 0.2);
+        }
+        .result-row .status-icon {
+            font-size: 15px;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .result-row .q-info {
+            flex: 1;
+            min-width: 100px;
+        }
+        .result-row .q-info .q-tags {
+            font-size: 11px;
+            color: var(--gray);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .result-row .q-info .q-letter {
+            font-family: var(--font-bengali);
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .result-row .user-answer, .result-row .correct-answer {
+            font-family: var(--font-bengali);
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .result-row .correct-answer {
+            color: var(--green);
+        }
+
+        /* Footer */
+        .site-footer {
+            text-align: center;
+            padding: 20px 16px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--blue);
+            margin-top: auto;
+        }
+        .site-footer .dihad {
+            color: var(--orange);
+            font-weight: 600;
+        }
+
+        /* Language visibility */
+        .lang-en .only-bn {
+            display: none !important;
+        }
+        .lang-bn .only-en {
+            display: none !important;
+        }
+
+        /* Responsive - Tablet and smaller */
+        @media (max-width: 640px) {
+            .sidebar {
+                gap: 8px;
+                padding: 10px 12px;
+            }
+            .brand span {
+                font-size: 12px;
+            }
+            .lang-toggle {
+                width: 56px;
+                height: 26px;
+            }
+            .lang-toggle .toggle-knob {
+                width: 20px;
+                height: 20px;
+                left: 2px;
+                top: 2px;
+            }
+            .lang-toggle.bn .toggle-knob {
+                transform: translateX(30px);
+            }
+            .lang-toggle .lang-label {
+                font-size: 9px;
+            }
+            .nav-group a {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+            .content {
+                padding: 20px 8px 60px;
+            }
+            .page-head h1 {
+                font-size: 24px;
+            }
+            .block-head h2 {
+                font-size: 18px;
+            }
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .option-btn {
+                font-size: 20px;
+                padding: 12px 4px;
+                min-height: 50px;
+            }
+            .results-summary .big-number {
+                font-size: 32px;
+            }
+            .quiz-header {
+                gap: 6px;
+            }
+            .tag-pill {
+                font-size: 12px;
+                padding: 5px 8px;
+            }
+            .tag-pill .en-label {
+                font-size: 8px;
+            }
+
+            /* Table mobile optimization - fit full width */
+            .table-wrapper {
+                border-radius: 8px;
+                padding: 0;
+            }
+            .consonant-table {
+                min-width: 100%;
+                width: 100%;
+                font-size: 11px;
+                table-layout: fixed;
+            }
+            .consonant-table th, 
+            .consonant-table td {
+                padding: 4px 2px;
+                font-size: 10px;
+            }
+            .consonant-table thead th {
+                font-size: 9px;
+                line-height: 1.2;
+                padding: 5px 2px;
+                letter-spacing: 0;
+            }
+            .consonant-table thead th .header-line1,
+            .consonant-table thead th .header-line2 {
+                font-size: 9px;
+                display: block;
+                line-height: 1.3;
+            }
+            .consonant-table tbody td {
+                font-size: 14px;
+                padding: 6px 2px;
+            }
+            .consonant-table tbody td.row-label {
+                font-size: 10px;
+                min-width: 40px;
+                padding: 6px 4px;
+            }
+            .consonant-table .row-label .en {
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .consonant-table th, 
+            .consonant-table td {
+                padding: 3px 1px;
+                font-size: 9px;
+            }
+            .consonant-table thead th {
+                font-size: 8px;
+                padding: 4px 1px;
+            }
+            .consonant-table thead th .header-line1,
+            .consonant-table thead th .header-line2 {
+                font-size: 8px;
+            }
+            .consonant-table tbody td {
+                font-size: 13px;
+                padding: 5px 1px;
+            }
+            .consonant-table tbody td.row-label {
+                font-size: 9px;
+                padding: 5px 2px;
+            }
+        }
+    </style>
+</head>
+<body class="lang-en">
+
+    <div class="bg-fixed"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="app-container">
+        <!-- TOP BAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="swatch"></div>
+                <span data-i18n="brand">bhasha/quiz</span>
+            </div>
+            <div class="lang-toggle-wrap">
+                <div class="lang-toggle" id="langToggle" role="button" tabindex="0" aria-label="Toggle language">
+                    <span class="lang-label active" data-lang="en">EN</span>
+                    <span class="lang-label" data-lang="bn">বাং</span>
+                    <div class="toggle-knob"></div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <a href="#table-section" data-i18n="navTable">Consonant Table</a>
+                <a href="#quiz-section" data-i18n="navQuiz">Take Test</a>
+                <a href="#results-section" data-i18n="navResults">Results</a>
+                <a href="#tag-guide" data-i18n="navTagGuide">Tag Guide</a>
+                <a href="#how-it-works" data-i18n="navHow">How It Works</a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="content">
+            <!-- Hero -->
+            <div class="page-head">
+                <h1>
+                    <span class="bengali" style="font-family:var(--font-bengali);">ব্যঞ্জনবর্ণ</span>
+                    <span class="only-en" style="color:var(--text-dim);font-size:0.7em;"> / Banjonborno</span>
+                </h1>
+                <p data-i18n="heroDesc">Explore the phonetic classification of the 25 Touch Consonants in the Bengali alphabet. Study the chart below, then test your knowledge with dynamically generated MCQs.</p>
+            </div>
+
+            <!-- TABLE SECTION (hidden when quiz active) -->
+            <section class="block" id="table-section">
+                <div class="block-head">
+                    <h2 data-i18n="tableHeading">The 25 Touch Consonants Chart</h2>
+                    <span data-i18n="tableSub">5 × 5 grid · phonetic classification</span>
+                </div>
+                <p class="block-desc" data-i18n="tableDesc">Each consonant carries 3 tags: Place of Articulation, Voicing, and Aspiration/Nasality. Study carefully before taking the test.</p>
+
+                <div class="glass" style="padding:12px;">
+                    <div class="table-wrapper">
+                        <table class="consonant-table" id="consonantTable"></table>
+                    </div>
+                </div>
+
+                <div style="margin-top:18px; text-align:center;">
+                    <button class="btn btn-primary" id="takeTestBtn" style="font-size:16px; padding:12px 28px;">
+                        <span data-i18n="takeTestBtn">Take Test</span>
+                        <span style="font-size:18px;">→</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- QUIZ SECTION -->
+            <section class="block quiz-section" id="quiz-section">
+                <div class="block-head">
+                    <h2 data-i18n="quizHeading">Test Your Knowledge</h2>
+                    <span data-i18n="quizSub">MCQ · 3 tags per question</span>
+                </div>
+                <p class="block-desc" data-i18n="quizDesc">Each question shows 3 attribute tags in Bangla. Choose the correct letter from the 4 options. Your score updates instantly.</p>
+
+                <div class="quiz-header">
+                    <span class="quiz-progress" id="quizProgress">Question 1</span>
+                    <span class="quiz-timer" id="quizTimer">⏱ 00:00</span>
+                    <span class="quiz-score" id="quizScore">Score: 0</span>
+                </div>
+
+                <div class="glass question-card" id="questionCard">
+                    <div class="question-number" id="questionNumber">QUESTION 1</div>
+                    <div class="question-tags" id="questionTags"></div>
+                    <div class="question-prompt" data-i18n="questionPrompt">Which letter matches all three tags above?</div>
+                    <div class="options-grid" id="optionsGrid"></div>
+                    <div class="quiz-footer">
+                        <span class="feedback-msg" id="feedbackMsg"></span>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="btn btn-ghost btn-sm" id="nextBtn" style="display:none;" data-i18n="nextBtn">Next Question →</button>
+                            <button class="btn btn-outline-red btn-sm" id="endBtn" data-i18n="endBtn">End Test</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RESULTS SECTION -->
+            <section class="block results-section" id="results-section">
+                <div class="block-head">
+                    <h2 data-i18n="resultsHeading">Your Results</h2>
+                    <span data-i18n="resultsSub">score summary & review</span>
+                </div>
+                <div class="glass results-summary" id="resultsSummary"></div>
+                <div class="glass results-detail" id="resultsDetail"></div>
+                <div style="margin-top:18px; text-align:center; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                    <button class="btn btn-primary" id="retakeBtn" data-i18n="retakeBtn">Retake Test</button>
+                    <button class="btn btn-ghost" id="backToTableBtn" data-i18n="backBtn">Back to Table</button>
+                </div>
+            </section>
+
+            <!-- TAG GUIDE -->
+            <section class="block" id="tag-guide">
+                <div class="block-head">
+                    <h2 data-i18n="tagGuideHeading">Tag Guide</h2>
+                    <span data-i18n="tagGuideSub">quick reference</span>
+                </div>
+                <div class="glass" style="padding:16px;">
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px;">
+                        <div>
+                            <h4 style="font-size:13px; margin-bottom:6px; color:var(--orange-soft);" data-i18n="tagPlaceTitle">Place of Articulation <span class="bengali">(উচ্চারণ স্থান)</span></h4>
+                            <p style="font-size:12.5px; color:var(--text-dim); line-height:1.8; margin:0;" data-i18n="tagPlaceContent">
+                                <span class="bengali">কণ্ঠ</span> — Velar<br>
+                                <span class="bengali">তালু</span> — Palatal<br>
+                                <span class="bengali">মূর্ধা</span> — Retroflex<br>
+                                <span class="bengali">দন্ত</span> — Dental<br>
+                                <span class="bengali">ওষ্ঠ</span> — Labial
+                            </p>
+                        </div>
+                        <div>
+                            <h4 style="font-size:13px; margin-bottom:6px; color:var(--purple-soft);" data-i18n="tagVoicingTitle">Voicing <span class="bengali">(ঘোষতা)</span></h4>
+                            <p style="font-size:12.5px; color:var(--text-dim); line-height:1.8; margin:0;" data-i18n="tagVoicingContent">
+                                <span class="bengali">অঘোষ</span> — Voiceless<br>
+                                <span class="bengali">ঘোষ</span> — Voiced
+                            </p>
+                        </div>
+                        <div>
+                            <h4 style="font-size:13px; margin-bottom:6px; color:var(--green);" data-i18n="tagAspTitle">Aspiration & Nasality <span class="bengali">(প্রাণতা)</span></h4>
+                            <p style="font-size:12.5px; color:var(--text-dim); line-height:1.8; margin:0;" data-i18n="tagAspContent">
+                                <span class="bengali">অল্পপ্রাণ</span> — Unaspirated<br>
+                                <span class="bengali">মহাপ্রাণ</span> — Aspirated<br>
+                                <span class="bengali">নাসিক্য</span> — Nasal
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HOW IT WORKS -->
+            <section class="block" id="how-it-works">
+                <div class="block-head">
+                    <h2 data-i18n="howHeading">How the Test Works</h2>
+                    <span data-i18n="howSub">dynamic MCQ generation</span>
+                </div>
+                <div class="glass" style="padding:16px;">
+                    <ul style="margin:0; padding-left:20px; color:var(--text-dim); font-size:13.5px; line-height:2;" id="howList">
+                        <li data-i18n="how1"><b style="color:var(--text)">25 unique questions</b> — one for each consonant in the table.</li>
+                        <li data-i18n="how2"><b style="color:var(--text)">Random order</b> — consonants are shuffled each time you take the test.</li>
+                        <li data-i18n="how3"><b style="color:var(--text)">3 Bangla tags</b> per question — Place, Voicing, and Aspiration/Nasality.</li>
+                        <li data-i18n="how4"><b style="color:var(--text)">4 options</b> — the correct letter plus 3 random distractors, shuffled.</li>
+                        <li data-i18n="how5"><b style="color:var(--text)">Instant feedback</b> — green for correct, red for incorrect; correct answer is always revealed.</li>
+                        <li data-i18n="how6"><b style="color:var(--text)">End anytime</b> — the "End Test" button stops the quiz and shows your full results.</li>
+                        <li data-i18n="how7"><b style="color:var(--text)">Detailed review</b> — see which questions you got right and wrong, with the correct answers.</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            Made by <span class="dihad">Dihad</span> <span id="footerYear">2025</span>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            // ===== TRANSLATION DICTIONARY =====
+            const translations = {
+                en: {
+                    brand: 'Banjonborno/quiz',
+                    navTable: 'Consonant Table',
+                    navQuiz: 'Take Test',
+                    navResults: 'Results',
+                    navTagGuide: 'Tag Guide',
+                    navHow: 'How It Works',
+                    heroDesc: 'Explore the phonetic classification of the 25 Touch Consonants in the Bengali alphabet. Study the chart below, then test your knowledge with dynamically generated MCQs.',
+                    tableHeading: 'The 25 Touch Consonants Chart',
+                    tableSub: '5 × 5 grid · phonetic classification',
+                    tableDesc: 'Each consonant carries 3 tags: Place of Articulation, Voicing, and Aspiration/Nasality. Study carefully before taking the test.',
+                    takeTestBtn: 'Take Test',
+                    quizHeading: 'Test Your Knowledge',
+                    quizSub: 'MCQ · 3 tags per question',
+                    quizDesc: 'Each question shows 3 attribute tags in Bangla. Choose the correct letter from the 4 options. Your score updates instantly.',
+                    questionPrompt: 'Which letter matches all three tags above?',
+                    nextBtn: 'Next Question →',
+                    endBtn: 'End Test',
+                    resultsHeading: 'Your Results',
+                    resultsSub: 'score summary & review',
+                    retakeBtn: 'Retake Test',
+                    backBtn: 'Back to Table',
+                    tagGuideHeading: 'Tag Guide',
+                    tagGuideSub: 'quick reference',
+                    tagPlaceTitle: 'Place of Articulation',
+                    tagVoicingTitle: 'Voicing',
+                    tagAspTitle: 'Aspiration & Nasality',
+                    howHeading: 'How the Test Works',
+                    howSub: 'dynamic MCQ generation',
+                    how1: '<b style="color:var(--text)">25 unique questions</b> — one for each consonant in the table.',
+                    how2: '<b style="color:var(--text)">Random order</b> — consonants are shuffled each time you take the test.',
+                    how3: '<b style="color:var(--text)">3 Bangla tags</b> per question — Place, Voicing, and Aspiration/Nasality.',
+                    how4: '<b style="color:var(--text)">4 options</b> — the correct letter plus 3 random distractors, shuffled.',
+                    how5: '<b style="color:var(--text)">Instant feedback</b> — green for correct, red for incorrect; correct answer is always revealed.',
+                    how6: '<b style="color:var(--text)">End anytime</b> — the "End Test" button stops the quiz and shows your full results.',
+                    how7: '<b style="color:var(--text)">Detailed review</b> — see which questions you got right and wrong, with the correct answers.',
+                    correctLabel: 'Correct',
+                    incorrectLabel: 'Incorrect',
+                    questionNum: 'QUESTION',
+                    ofLabel: 'of',
+                    scoreLabel: 'Score',
+                    correctAnswers: 'correct answers',
+                    accuracy: 'Accuracy',
+                    correct: 'Correct',
+                    wrong: 'Wrong',
+                    skipped: 'Skipped',
+                    youLabel: 'You',
+                    correctAnswerLabel: 'Correct',
+                    timeLabel: 'Time',
+                    madeBy: 'Made by',
+                    footerText: 'Made by',
+                },
+                bn: {
+                    brand: 'ব্যঞ্জনবর্ণ/কুইজ',
+                    navTable: 'ব্যঞ্জনবর্ণ তালিকা',
+                    navQuiz: 'পরীক্ষা দিন',
+                    navResults: 'ফলাফল',
+                    navTagGuide: 'ট্যাগ নির্দেশিকা',
+                    navHow: 'কীভাবে কাজ করে',
+                    heroDesc: 'বাংলা বর্ণমালার ২৫টি স্পর্শ বর্ণের ধ্বনিগত শ্রেণিবিন্যাস অন্বেষণ করুন। নিচের তালিকাটি পড়ুন, তারপর গতিশীলভাবে তৈরি এমসিকিউ দিয়ে আপনার জ্ঞান পরীক্ষা করুন।',
+                    tableHeading: '২৫টি স্পর্শ বর্ণের তালিকা',
+                    tableSub: '৫ × ৫ গ্রিড · ধ্বনিগত শ্রেণিবিন্যাস',
+                    tableDesc: 'প্রতিটি বর্ণে ৩টি ট্যাগ থাকে: উচ্চারণ স্থান, ঘোষতা এবং প্রাণতা/নাসিক্য। পরীক্ষা দেওয়ার আগে মনোযোগ দিয়ে পড়ুন।',
+                    takeTestBtn: 'পরীক্ষা দিন',
+                    quizHeading: 'আপনার জ্ঞান পরীক্ষা করুন',
+                    quizSub: 'এমসিকিউ · প্রতি প্রশ্নে ৩টি ট্যাগ',
+                    quizDesc: 'প্রতিটি প্রশ্নে বাংলায় ৩টি বৈশিষ্ট্য ট্যাগ দেখানো হয়। ৪টি বিকল্প থেকে সঠিক বর্ণটি বেছে নিন। আপনার স্কোর সাথে সাথে আপডেট হবে।',
+                    questionPrompt: 'উপরের তিনটি ট্যাগের সাথে কোন বর্ণটি মিলে যায়?',
+                    nextBtn: 'পরবর্তী প্রশ্ন →',
+                    endBtn: 'পরীক্ষা শেষ করুন',
+                    resultsHeading: 'আপনার ফলাফল',
+                    resultsSub: 'স্কোর সারাংশ ও পর্যালোচনা',
+                    retakeBtn: 'আবার পরীক্ষা দিন',
+                    backBtn: 'তালিকায় ফিরে যান',
+                    tagGuideHeading: 'ট্যাগ নির্দেশিকা',
+                    tagGuideSub: 'দ্রুত রেফারেন্স',
+                    tagPlaceTitle: 'উচ্চারণ স্থান',
+                    tagVoicingTitle: 'ঘোষতা',
+                    tagAspTitle: 'প্রাণতা ও নাসিক্য',
+                    howHeading: 'পরীক্ষাটি কীভাবে কাজ করে',
+                    howSub: 'গতিশীল এমসিকিউ তৈরি',
+                    how1: '<b style="color:var(--text)">২৫টি অনন্য প্রশ্ন</b> — তালিকার প্রতিটি ব্যঞ্জনবর্ণের জন্য একটি করে।',
+                    how2: '<b style="color:var(--text)">এলোমেলো ক্রম</b> — প্রতিবার পরীক্ষা দেওয়ার সময় ব্যঞ্জনবর্ণগুলো এলোমেলো করা হয়।',
+                    how3: '<b style="color:var(--text)">৩টি বাংলা ট্যাগ</b> প্রতি প্রশ্নে — উচ্চারণ স্থান, ঘোষতা এবং প্রাণতা/নাসিক্য।',
+                    how4: '<b style="color:var(--text)">৪টি বিকল্প</b> — সঠিক বর্ণসহ ৩টি এলোমেলো ভুল বিকল্প।',
+                    how5: '<b style="color:var(--text)">তাৎক্ষণিক প্রতিক্রিয়া</b> — সঠিক হলে সবুজ, ভুল হলে লাল; সঠিক উত্তর সবসময় দেখানো হয়।',
+                    how6: '<b style="color:var(--text)">যেকোনো সময় শেষ করুন</b> — "পরীক্ষা শেষ করুন" বাটন চাপলে সম্পূর্ণ ফলাফল দেখানো হবে।',
+                    how7: '<b style="color:var(--text)">বিস্তারিত পর্যালোচনা</b> — কোনগুলো সঠিক আর কোনগুলো ভুল হয়েছে তা সঠিক উত্তরসহ দেখুন।',
+                    correctLabel: 'সঠিক',
+                    incorrectLabel: 'ভুল',
+                    questionNum: 'প্রশ্ন',
+                    ofLabel: 'এর',
+                    scoreLabel: 'স্কোর',
+                    correctAnswers: 'সঠিক উত্তর',
+                    accuracy: 'সঠিকতা',
+                    correct: 'সঠিক',
+                    wrong: 'ভুল',
+                    skipped: 'বাদ দেওয়া',
+                    youLabel: 'আপনি',
+                    correctAnswerLabel: 'সঠিক',
+                    timeLabel: 'সময়',
+                    madeBy: 'Made by',
+                    footerText: 'Made by',
+                }
+            };
+
+            // ===== CONSONANT DATA =====
+            const allConsonants = [
+                { letter: 'ক', place: 'কণ্ঠ', placeEn: 'Velar', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'খ', place: 'কণ্ঠ', placeEn: 'Velar', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'গ', place: 'কণ্ঠ', placeEn: 'Velar', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'ঘ', place: 'কণ্ঠ', placeEn: 'Velar', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'ঙ', place: 'কণ্ঠ', placeEn: 'Velar', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'নাসিক্য', aspirationEn: 'Nasal' },
+                { letter: 'চ', place: 'তালু', placeEn: 'Palatal', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'ছ', place: 'তালু', placeEn: 'Palatal', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'জ', place: 'তালু', placeEn: 'Palatal', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'ঝ', place: 'তালু', placeEn: 'Palatal', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'ঞ', place: 'তালু', placeEn: 'Palatal', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'নাসিক্য', aspirationEn: 'Nasal' },
+                { letter: 'ট', place: 'মূর্ধা', placeEn: 'Retroflex', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'ঠ', place: 'মূর্ধা', placeEn: 'Retroflex', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'ড', place: 'মূর্ধা', placeEn: 'Retroflex', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'ঢ', place: 'মূর্ধা', placeEn: 'Retroflex', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'ণ', place: 'মূর্ধা', placeEn: 'Retroflex', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'নাসিক্য', aspirationEn: 'Nasal' },
+                { letter: 'ত', place: 'দন্ত', placeEn: 'Dental', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'থ', place: 'দন্ত', placeEn: 'Dental', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'দ', place: 'দন্ত', placeEn: 'Dental', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'ধ', place: 'দন্ত', placeEn: 'Dental', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'ন', place: 'দন্ত', placeEn: 'Dental', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'নাসিক্য', aspirationEn: 'Nasal' },
+                { letter: 'প', place: 'ওষ্ঠ', placeEn: 'Labial', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'ফ', place: 'ওষ্ঠ', placeEn: 'Labial', voicing: 'অঘোষ', voicingEn: 'Voiceless', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'ব', place: 'ওষ্ঠ', placeEn: 'Labial', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'অল্পপ্রাণ', aspirationEn: 'Unaspirated' },
+                { letter: 'ভ', place: 'ওষ্ঠ', placeEn: 'Labial', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'মহাপ্রাণ', aspirationEn: 'Aspirated' },
+                { letter: 'ম', place: 'ওষ্ঠ', placeEn: 'Labial', voicing: 'ঘোষ', voicingEn: 'Voiced', aspiration: 'নাসিক্য', aspirationEn: 'Nasal' }
+            ];
+
+            const tableRowsData = [
+                { placeBn: 'কণ্ঠ', placeEn: 'Velar', letters: ['ক', 'খ', 'গ', 'ঘ', 'ঙ'] },
+                { placeBn: 'তালু', placeEn: 'Palatal', letters: ['চ', 'ছ', 'জ', 'ঝ', 'ঞ'] },
+                { placeBn: 'মূর্ধা', placeEn: 'Retroflex', letters: ['ট', 'ঠ', 'ড', 'ঢ', 'ণ'] },
+                { placeBn: 'দন্ত', placeEn: 'Dental', letters: ['ত', 'থ', 'দ', 'ধ', 'ন'] },
+                { placeBn: 'ওষ্ঠ', placeEn: 'Labial', letters: ['প', 'ফ', 'ব', 'ভ', 'ম'] }
+            ];
+
+            const headerDefs = [
+                { en: 'Place of Articulation', bn: 'উচ্চারণ স্থান' },
+                { en: 'Voiceless · Unaspirated', bn: 'অঘোষ · অল্পপ্রাণ' },
+                { en: 'Voiceless · Aspirated', bn: 'অঘোষ · মহাপ্রাণ' },
+                { en: 'Voiced · Unaspirated', bn: 'ঘোষ · অল্পপ্রাণ' },
+                { en: 'Voiced · Aspirated', bn: 'ঘোষ · মহাপ্রাণ' },
+                { en: 'Nasal', bn: 'নাসিক্য' }
+            ];
+
+            // ===== DOM REFS =====
+            const tableSection = document.getElementById('table-section');
+            const takeTestBtn = document.getElementById('takeTestBtn');
+            const quizSection = document.getElementById('quiz-section');
+            const resultsSection = document.getElementById('results-section');
+            const quizProgress = document.getElementById('quizProgress');
+            const quizScore = document.getElementById('quizScore');
+            const quizTimer = document.getElementById('quizTimer');
+            const questionNumber = document.getElementById('questionNumber');
+            const questionTags = document.getElementById('questionTags');
+            const optionsGrid = document.getElementById('optionsGrid');
+            const feedbackMsg = document.getElementById('feedbackMsg');
+            const nextBtn = document.getElementById('nextBtn');
+            const endBtn = document.getElementById('endBtn');
+            const resultsSummary = document.getElementById('resultsSummary');
+            const resultsDetail = document.getElementById('resultsDetail');
+            const retakeBtn = document.getElementById('retakeBtn');
+            const backToTableBtn = document.getElementById('backToTableBtn');
+            const langToggle = document.getElementById('langToggle');
+            const footerYear = document.getElementById('footerYear');
+            const consonantTable = document.getElementById('consonantTable');
+
+            // ===== STATE =====
+            let currentLang = 'en';
+            let shuffledConsonants = [];
+            let currentIndex = 0;
+            let score = 0;
+            let results = [];
+            let questionAnswered = false;
+            let currentOptions = [];
+            let timerInterval = null;
+            let seconds = 0;
+            let quizActive = false;
+
+            // ===== UTILITY =====
+            function shuffle(arr) {
+                const a = [...arr];
+                for (let i = a.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [a[i], a[j]] = [a[j], a[i]];
+                }
+                return a;
+            }
+
+            function getTagClass(type, value) {
+                if (type === 'place') return 'place';
+                if (type === 'voicing') return value === 'অঘোষ' ? 'voicing-aghosh' : 'voicing-ghosh';
+                if (type === 'aspiration') {
+                    if (value === 'অল্পপ্রাণ') return 'aspiration-alpaprana';
+                    if (value === 'মহাপ্রাণ') return 'aspiration-mahaprana';
+                    return 'aspiration-nasikya';
+                }
+                return '';
+            }
+
+            function getVoicingEnLabel(v) { return v === 'অঘোষ' ? 'Voiceless' : 'Voiced'; }
+            function getAspirationEnLabel(a) {
+                if (a === 'অল্পপ্রাণ') return 'Unaspirated';
+                if (a === 'মহাপ্রাণ') return 'Aspirated';
+                return 'Nasal';
+            }
+
+            // ===== TABLE RENDER =====
+            function renderTable() {
+                const isBn = currentLang === 'bn';
+                let html = '<thead><tr>';
+                headerDefs.forEach((h, i) => {
+                    const parts = isBn ? h.bn.split(' · ') : h.en.split(' · ');
+                    html += '<th style="' + (i === 0 ? 'text-align:left;' : '') + '">';
+                    if (parts.length > 1) {
+                        html += '<span class="header-line1">' + parts[0] + '</span>';
+                        html += '<span class="header-line2">' + parts[1] + '</span>';
+                    } else {
+                        // For single-word headers like "Nasal" or "নাসিক্য", just show it on one line
+                        // But for "Place of Articulation" / "উচ্চারণ স্থান" split them too
+                        if (i === 0) {
+                            const words = isBn ? h.bn.split(' ') : h.en.split(' ');
+                            if (words.length > 1) {
+                                html += '<span class="header-line1">' + words[0] + '</span>';
+                                html += '<span class="header-line2">' + words.slice(1).join(' ') + '</span>';
+                            } else {
+                                html += parts[0];
+                            }
+                        } else {
+                            html += parts[0];
+                        }
+                    }
+                    html += '</th>';
+                });
+                html += '</tr></thead><tbody>';
+
+                tableRowsData.forEach(row => {
+                    const placeDisplay = isBn ? row.placeBn : row.placeBn + ' <span class="en">' + row.placeEn + '</span>';
+                    html += '<tr>';
+                    html += '<td class="row-label">' + placeDisplay + '</td>';
+                    row.letters.forEach(l => { html += '<td>' + l + '</td>'; });
+                    html += '</tr>';
+                });
+                html += '</tbody>';
+                consonantTable.innerHTML = html;
+            }
+
+            // ===== TRANSLATION SYSTEM =====
+            function applyTranslations() {
+                const t = translations[currentLang];
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) {
+                        if (key.startsWith('how')) {
+                            el.innerHTML = t[key];
+                        } else {
+                            el.textContent = t[key];
+                        }
+                    }
+                });
+                renderTable();
+                updateScoreDisplay();
+                updateProgressDisplay();
+                updateTimerDisplay();
+                document.querySelectorAll('.lang-label').forEach(lbl => {
+                    const lang = lbl.getAttribute('data-lang');
+                    lbl.classList.toggle('active', lang === currentLang);
+                });
+                langToggle.classList.toggle('bn', currentLang === 'bn');
+                document.body.className = 'lang-' + currentLang;
+                document.querySelector('.brand span').textContent = t.brand;
+                document.querySelector('.site-footer').innerHTML = t.footerText + ' <span class="dihad">Dihad</span> ' + footerYear.textContent;
+
+                if (quizActive) {
+                    if (!questionAnswered) renderQuestion();
+                    else {
+                        if (feedbackMsg.classList.contains('correct-fb')) {
+                            feedbackMsg.textContent = currentLang === 'bn' ? '✓ সঠিক! +১ পয়েন্ট' : '✓ Correct! +1 point';
+                        } else if (feedbackMsg.classList.contains('incorrect-fb') && results.length > 0) {
+                            const lr = results[results.length - 1];
+                            feedbackMsg.textContent = currentLang === 'bn' ? '✗ ভুল। সঠিক উত্তর "' + lr.correctAnswer + '"।' : '✗ Incorrect. The correct answer is "' + lr.correctAnswer + '".';
+                        }
+                        updateNextBtnLabel();
+                    }
+                }
+                if (resultsSection.classList.contains('active')) renderResults();
+            }
+
+            function updateNextBtnLabel() {
+                const isLast = currentIndex >= shuffledConsonants.length - 1;
+                nextBtn.textContent = isLast ? (currentLang === 'bn' ? 'ফলাফল দেখুন →' : 'See Results →') : (currentLang === 'bn' ? 'পরবর্তী প্রশ্ন →' : 'Next Question →');
+            }
+
+            // ===== STOPWATCH =====
+            function formatTime(totalSec) {
+                const m = Math.floor(totalSec / 60).toString().padStart(2, '0');
+                const s = (totalSec % 60).toString().padStart(2, '0');
+                return m + ':' + s;
+            }
+            function startTimer() {
+                stopTimer();
+                seconds = 0;
+                updateTimerDisplay();
+                timerInterval = setInterval(() => { seconds++; updateTimerDisplay(); }, 1000);
+            }
+            function stopTimer() {
+                if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+            }
+            function updateTimerDisplay() {
+                quizTimer.textContent = '⏱ ' + formatTime(seconds);
+            }
+
+            // ===== QUIZ LOGIC =====
+            function startQuiz() {
+                shuffledConsonants = shuffle(allConsonants);
+                currentIndex = 0;
+                score = 0;
+                results = [];
+                questionAnswered = false;
+                quizActive = true;
+                tableSection.style.display = 'none';
+                updateScoreDisplay();
+                startTimer();
+                quizSection.classList.add('active');
+                resultsSection.classList.remove('active');
+                renderQuestion();
+                quizSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function renderQuestion() {
+                if (currentIndex >= shuffledConsonants.length) {
+                    showResults();
+                    return;
+                }
+                const consonant = shuffledConsonants[currentIndex];
+                questionAnswered = false;
+                feedbackMsg.textContent = '';
+                feedbackMsg.className = 'feedback-msg';
+                nextBtn.style.display = 'none';
+
+                questionNumber.textContent = (currentLang === 'bn' ? 'প্রশ্ন ' : 'QUESTION ') + (currentIndex + 1);
+                updateProgressDisplay();
+                updateNextBtnLabel();
+
+                const tags = [
+                    { type: 'place', value: consonant.place, en: consonant.placeEn },
+                    { type: 'voicing', value: consonant.voicing, en: getVoicingEnLabel(consonant.voicing) },
+                    { type: 'aspiration', value: consonant.aspiration, en: getAspirationEnLabel(consonant.aspiration) }
+                ];
+
+                questionTags.innerHTML = '';
+                tags.forEach(tag => {
+                    const pill = document.createElement('span');
+                    pill.className = 'tag-pill ' + getTagClass(tag.type, tag.value);
+                    if (currentLang === 'bn') {
+                        pill.innerHTML = '<span class="bengali" style="font-family:var(--font-bengali);font-weight:600;">' + tag.value + '</span>';
+                    } else {
+                        pill.innerHTML = '<span class="bengali" style="font-family:var(--font-bengali);font-weight:600;">' + tag.value + '</span><span class="en-label">' + tag.en + '</span>';
+                    }
+                    questionTags.appendChild(pill);
+                });
+
+                const correctLetter = consonant.letter;
+                const others = allConsonants.filter(c => c.letter !== correctLetter).map(c => c.letter);
+                const distractors = shuffle(others).slice(0, 3);
+                currentOptions = shuffle([correctLetter, ...distractors]);
+
+                optionsGrid.innerHTML = '';
+                const labels = ['A', 'B', 'C', 'D'];
+                currentOptions.forEach((letter, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerHTML = '<span class="option-label">' + labels[i] + '</span>' + letter;
+                    btn.addEventListener('click', function() { handleAnswer(letter, btn, correctLetter); });
+                    optionsGrid.appendChild(btn);
+                });
+            }
+
+            function handleAnswer(selected, btnElement, correct) {
+                if (questionAnswered) return;
+                questionAnswered = true;
+                const isCorrect = selected === correct;
+                if (isCorrect) {
+                    score++;
+                    updateScoreDisplay();
+                    feedbackMsg.textContent = currentLang === 'bn' ? '✓ সঠিক! +১ পয়েন্ট' : '✓ Correct! +1 point';
+                    feedbackMsg.className = 'feedback-msg correct-fb';
+                    btnElement.classList.add('correct');
+                } else {
+                    feedbackMsg.textContent = currentLang === 'bn' ? '✗ ভুল। সঠিক উত্তর "' + correct + '"।' : '✗ Incorrect. The correct answer is "' + correct + '".';
+                    feedbackMsg.className = 'feedback-msg incorrect-fb';
+                    btnElement.classList.add('incorrect');
+                    optionsGrid.querySelectorAll('.option-btn').forEach(b => {
+                        if (b.textContent.includes(correct)) b.classList.add('correct');
+                    });
+                }
+                optionsGrid.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                results.push({
+                    consonant: shuffledConsonants[currentIndex],
+                    userAnswer: selected,
+                    correctAnswer: correct,
+                    isCorrect: isCorrect
+                });
+                nextBtn.style.display = 'inline-flex';
+                updateNextBtnLabel();
+            }
+
+            function updateScoreDisplay() {
+                quizScore.textContent = (currentLang === 'bn' ? 'স্কোর: ' : 'Score: ') + score;
+            }
+            function updateProgressDisplay() {
+                if (quizActive && currentIndex < shuffledConsonants.length) {
+                    quizProgress.textContent = (currentLang === 'bn' ? 'প্রশ্ন ' : 'Question ') + (currentIndex + 1) + (currentLang === 'bn' ? ' / ' : ' of ') + shuffledConsonants.length;
+                } else if (quizActive) {
+                    quizProgress.textContent = currentLang === 'bn' ? 'সম্পন্ন' : 'Done';
+                }
+            }
+
+            function nextQuestion() {
+                currentIndex++;
+                if (currentIndex >= shuffledConsonants.length) {
+                    showResults();
+                } else {
+                    renderQuestion();
+                }
+            }
+
+            function endTest() {
+                showResults();
+            }
+
+            function showResults() {
+                stopTimer();
+                quizActive = false;
+                quizSection.classList.remove('active');
+                resultsSection.classList.add('active');
+                tableSection.style.display = 'block';
+                renderResults();
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function renderResults() {
+                const t = translations[currentLang];
+                const total = results.length;
+                const correctCount = results.filter(r => r.isCorrect).length;
+                const wrongCount = total - correctCount;
+                const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+                const timeStr = formatTime(seconds);
+
+                resultsSummary.innerHTML = `
+                    <div class="big-number">${correctCount} / ${total}</div>
+                    <div class="big-label">${t.correctAnswers}</div>
+                    <div class="sub-stats">
+                        <span class="sub-stat">${t.accuracy}: <span>${pct}%</span></span>
+                        <span class="sub-stat">${t.correct}: <span>${correctCount}</span></span>
+                        <span class="sub-stat">${t.wrong}: <span>${wrongCount}</span></span>
+                        <span class="sub-stat">${t.timeLabel}: <span>${timeStr}</span></span>
+                        <span class="sub-stat">${t.skipped}: <span>${allConsonants.length - total}</span></span>
+                    </div>
+                `;
+
+                if (total === 0) {
+                    resultsDetail.innerHTML = '<p style="text-align:center;color:var(--text-dim);font-size:13px;margin:12px 0;">' + (currentLang === 'bn' ? 'কোনো প্রশ্নের উত্তর দেওয়া হয়নি।' : 'No questions were answered.') + '</p>';
+                } else {
+                    let rowsHtml = '';
+                    results.forEach((r) => {
+                        const icon = r.isCorrect ? '✓' : '✗';
+                        const rowClass = r.isCorrect ? 'correct-row' : 'incorrect-row';
+                        rowsHtml += `
+                            <div class="result-row ${rowClass}">
+                                <span class="status-icon">${icon}</span>
+                                <div class="q-info">
+                                    <div class="q-letter">${r.consonant.letter}</div>
+                                    <div class="q-tags">${r.consonant.place} · ${r.consonant.voicing} · ${r.consonant.aspiration}</div>
+                                </div>
+                                <span class="user-answer">${t.youLabel}: ${r.userAnswer}</span>
+                                ${!r.isCorrect ? `<span class="correct-answer">${t.correctAnswerLabel}: ${r.correctAnswer}</span>` : ''}
+                            </div>
+                        `;
+                    });
+                    resultsDetail.innerHTML = rowsHtml;
+                }
+            }
+
+            // ===== LANGUAGE TOGGLE =====
+            langToggle.addEventListener('click', () => {
+                currentLang = currentLang === 'en' ? 'bn' : 'en';
+                applyTranslations();
+            });
+
+            // ===== EVENT LISTENERS =====
+            takeTestBtn.addEventListener('click', startQuiz);
+            nextBtn.addEventListener('click', nextQuestion);
+            endBtn.addEventListener('click', endTest);
+            retakeBtn.addEventListener('click', startQuiz);
+            backToTableBtn.addEventListener('click', () => {
+                resultsSection.classList.remove('active');
+                tableSection.style.display = 'block';
+                document.getElementById('table-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            // Keyboard: 1-4 to answer, Enter for next
+            document.addEventListener('keydown', function(e) {
+                if (!quizSection.classList.contains('active')) return;
+                if (questionAnswered) {
+                    if (e.key === 'Enter' && nextBtn.style.display !== 'none') nextQuestion();
+                    return;
+                }
+                const km = { '1': 0, '2': 1, '3': 2, '4': 3 };
+                if (e.key in km) {
+                    const btns = optionsGrid.querySelectorAll('.option-btn');
+                    if (btns[km[e.key]] && !btns[km[e.key]].disabled) btns[km[e.key]].click();
+                }
+            });
+
+            // ===== INIT =====
+            footerYear.textContent = new Date().getFullYear();
+            renderTable();
+            applyTranslations();
+            console.log('Banjonborno quiz loaded. 25 consonants ready.');
+        })();
+    </script>
+</body>
+</html>
